@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreditCardController extends AccountController implements ICreditCardController {
 
-    public String accessAccountDetails(Long accountId){
-        return null;
-    }
+
 
 }

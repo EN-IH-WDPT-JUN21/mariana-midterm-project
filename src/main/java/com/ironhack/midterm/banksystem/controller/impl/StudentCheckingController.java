@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StudentCheckingController extends AccountController implements IStudentCheckingController {
 
-    public String accessAccountDetails(Long accountId){
-        return null;
-    }
+
 
 
 }
