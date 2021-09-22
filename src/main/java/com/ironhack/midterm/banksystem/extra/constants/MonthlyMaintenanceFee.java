@@ -1,6 +1,6 @@
-package com.ironhack.midterm.banksystem.constants;
+package com.ironhack.midterm.banksystem.extra.constants;
 
-import com.ironhack.midterm.banksystem.utils.Money;
+import com.ironhack.midterm.banksystem.extra.utils.Money;
 
 public class MonthlyMaintenanceFee {
 

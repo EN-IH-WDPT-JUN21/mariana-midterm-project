@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-public interface IOperationsController {
+public interface ITransactionController {
 
     List<Transaction> getTransactions();
     Receipt performsTransaction(TransactionRequest transactionRequest) throws AccountDoesNotExistException, EqualAccountsException;

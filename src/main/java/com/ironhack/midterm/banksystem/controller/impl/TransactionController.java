@@ -1,6 +1,6 @@
 package com.ironhack.midterm.banksystem.controller.impl;
 
-import com.ironhack.midterm.banksystem.controller.interfaces.IOperationsController;
+import com.ironhack.midterm.banksystem.controller.interfaces.ITransactionController;
 import com.ironhack.midterm.banksystem.dao.operations.Receipt;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dao.operations.TransactionRequest;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/operations")
-public class OperationsController implements IOperationsController {
+public class TransactionController implements ITransactionController {
 
     @Autowired
     private TransactionService transactionService;

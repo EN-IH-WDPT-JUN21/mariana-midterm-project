@@ -1,6 +1,6 @@
 package com.ironhack.midterm.banksystem.extra;
 
-public interface IAccountController {
+public interface IAccountControllerExtra {
 
     String accessAccountDetails(Long accountId);
 }

@@ -1,6 +1,5 @@
 package com.ironhack.midterm.banksystem.dao.operations;
 
-import com.ironhack.midterm.banksystem.dao.account.AccountTwo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

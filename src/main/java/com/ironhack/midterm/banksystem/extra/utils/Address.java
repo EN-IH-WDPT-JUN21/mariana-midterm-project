@@ -1,4 +1,4 @@
-package com.ironhack.midterm.banksystem.utils;
+package com.ironhack.midterm.banksystem.extra.utils;
 
 public class Address {
 
