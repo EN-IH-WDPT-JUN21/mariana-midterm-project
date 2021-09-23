@@ -9,6 +9,7 @@ import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
+import com.ironhack.midterm.banksystem.service.interfaces.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TransactionService {
+public class TransactionService implements ITransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -43,8 +44,6 @@ public class TransactionService {
             throw new EqualAccountsException("The account that initiated the transaction is the same that is receiving the transaction.");
         }
 
-//        var tempFromAccount = accountRepository.save(optionalFromAccount.get());
-//        var tempToAccount = accountRepository.save(optionalToAccount.get());
 
         //create the receipt
         var receipt = new Receipt();

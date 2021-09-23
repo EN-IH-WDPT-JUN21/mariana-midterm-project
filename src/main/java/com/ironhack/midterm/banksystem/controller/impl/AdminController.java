@@ -6,7 +6,7 @@ import com.ironhack.midterm.banksystem.dao.user.User;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.user.UserRepository;
-import com.ironhack.midterm.banksystem.service.user.AdminService;
+import com.ironhack.midterm.banksystem.service.impl.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

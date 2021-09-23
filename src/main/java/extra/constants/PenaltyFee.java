@@ -1,6 +1,6 @@
-package com.ironhack.midterm.banksystem.extra.constants;
+package extra.constants;
 
-import com.ironhack.midterm.banksystem.extra.utils.Money;
+import extra.utils.Money;
 
 public class PenaltyFee {
 

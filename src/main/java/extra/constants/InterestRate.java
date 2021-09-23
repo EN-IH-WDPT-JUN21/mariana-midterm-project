@@ -1,4 +1,4 @@
-package com.ironhack.midterm.banksystem.extra.constants;
+package extra.constants;
 
 import java.math.BigDecimal;
 

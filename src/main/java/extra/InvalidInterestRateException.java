@@ -1,4 +1,4 @@
-package com.ironhack.midterm.banksystem.extra;
+package extra;
 
 public class InvalidInterestRateException extends Exception{
 

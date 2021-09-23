@@ -1,4 +1,4 @@
-package com.ironhack.midterm.banksystem.service.user;
+package com.ironhack.midterm.banksystem.service.impl.user;
 
 import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;

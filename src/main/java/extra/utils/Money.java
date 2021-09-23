@@ -1,4 +1,4 @@
-package com.ironhack.midterm.banksystem.extra.utils;
+package extra.utils;
 
 import javax.persistence.Embeddable;
 import java.math.RoundingMode;
