@@ -3,7 +3,7 @@ package com.ironhack.midterm.banksystem.controller.impl;
 import com.ironhack.midterm.banksystem.controller.interfaces.ITransactionController;
 import com.ironhack.midterm.banksystem.dao.operations.Receipt;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
-import com.ironhack.midterm.banksystem.dao.operations.TransactionRequest;
+import com.ironhack.midterm.banksystem.dto.operations.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
 import com.ironhack.midterm.banksystem.service.impl.operations.TransactionService;
@@ -25,8 +25,7 @@ public class TransactionController implements ITransactionController {
     }
 
     @PostMapping
-    public Receipt performsTransaction(@RequestBody TransactionRequest transactionRequest) throws AccountDoesNotExistException, EqualAccountsException {
-
-        return transactionService.performsTransaction(transactionRequest);
+    public Receipt performsTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
+        return transactionService.performsTransaction(transactionRequestDTO);
     }
 }

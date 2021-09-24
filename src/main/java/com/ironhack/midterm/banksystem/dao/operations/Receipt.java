@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -15,11 +16,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Receipt {
 
+    @NotNull
     private Long fromAccountId;
+    @NotNull
     private Long toAccountId;
+    @NotNull
     private BigDecimal amount;
+    @NotNull
     private LocalDateTime date;
+    @NotNull
     private Long transactionId;
+    @NotNull
     private Result result;
 
 }

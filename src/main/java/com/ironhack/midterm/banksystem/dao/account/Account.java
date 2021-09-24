@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -16,13 +17,16 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 //@Table(name = "account_two")
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal balance;
+    private BigDecimal balance = new BigDecimal("0");
 
+    @NotNull
     @OneToOne(mappedBy = "account")
     private User user;
+
 
 }

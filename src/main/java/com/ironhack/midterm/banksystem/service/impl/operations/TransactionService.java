@@ -3,16 +3,18 @@ package com.ironhack.midterm.banksystem.service.impl.operations;
 import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.operations.Receipt;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
-import com.ironhack.midterm.banksystem.dao.operations.TransactionRequest;
+import com.ironhack.midterm.banksystem.dto.operations.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
-import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
-import com.ironhack.midterm.banksystem.service.interfaces.ITransactionService;
+import com.ironhack.midterm.banksystem.service.interfaces.operations.ITransactionService;
+import com.ironhack.midterm.banksystem.validators.LogicValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,55 +26,77 @@ public class TransactionService implements ITransactionService {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private LogicValidatorService logicValidatorService;
+
 
     public List<Transaction> findAll() {
         return transactionRepository.findAll();
     }
 
-    public Receipt performsTransaction(TransactionRequest transactionRequest) throws AccountDoesNotExistException, EqualAccountsException {
+    public Receipt performsTransaction( @Valid TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
 
-        //first a validation at dto level when you receive the object
-        Optional<Account> optionalFromAccount = accountRepository.findById(transactionRequest.getFromAccountId());
-        Optional<Account> optionalToAccount = accountRepository.findById(transactionRequest.getToAccountId());
+        //first a validation at dto level when you receive the object(add annotations)
+        //it should be in a validator class - component, autowired (logic, finance)
 
-        if (optionalFromAccount.isEmpty()) {
-            throw new AccountDoesNotExistException("The account that initiated the transaction does not exist.");
-        }else if (optionalToAccount.isEmpty()){
-            throw new AccountDoesNotExistException("The account that is receiving the transaction does not exist.");
-        }else if(optionalFromAccount.get().equals(optionalToAccount.get())){
-            throw new EqualAccountsException("The account that initiated the transaction is the same that is receiving the transaction.");
+
+        Optional<Account>[] optionalAccounts;
+
+        try {
+           optionalAccounts = logicValidatorService.validatesTransactionAccounts(transactionRequestDTO);
+        }catch (EqualAccountsException e){
+            throw new EqualAccountsException(e.getMessage());
+        }catch (AccountDoesNotExistException e){
+            throw new AccountDoesNotExistException(e.getMessage());
         }
+
+        Optional<Account> optionalFromAccount = optionalAccounts[0];
+        Optional<Account> optionalToAccount = optionalAccounts[1];
+
 
 
         //create the receipt
-        var receipt = new Receipt();
-        receipt.setDate(LocalDateTime.now());
-        receipt.setAmount(transactionRequest.getAmount());
-        receipt.setFromAccountId(optionalFromAccount.get().getId());
-        receipt.setToAccountId(optionalToAccount.get().getId());
+        Receipt receipt = createsReceiptWithoutResult(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
         //validate the request
-        if (optionalFromAccount.get().getBalance().compareTo(transactionRequest.getAmount()) < 0){
+        if (optionalFromAccount.get().getBalance().compareTo(transactionRequestDTO.getAmount()) < 0){
             receipt.setResult(Result.CANCELLED);
             return receipt;
         }
 
         //create the transaction
-        Transaction tempTransaction = new Transaction();
-        tempTransaction.setFromAccountId(transactionRequest.getFromAccountId());
-        tempTransaction.setToAccountId(transactionRequest.getToAccountId());
-        tempTransaction.setAmount(transactionRequest.getAmount());
-        var tempTransaction2 = transactionRepository.save(tempTransaction);
-
-        //Should this be someplace else?
-        optionalFromAccount.get().setBalance(optionalFromAccount.get().getBalance().subtract(tempTransaction.getAmount()));
-        optionalToAccount.get().setBalance(optionalToAccount.get().getBalance().add(tempTransaction.getAmount()));
 
 
-        receipt.setTransactionId(tempTransaction2.getId());
+        Transaction transaction = transfersMoney(transactionRequestDTO, optionalFromAccount, optionalToAccount);
+
+        receipt.setTransactionId(transaction.getId());
         receipt.setResult(Result.OK);
 
         return receipt;
+    }
+
+    @Transactional
+    public Transaction transfersMoney(TransactionRequestDTO transactionRequestDTO, Optional<Account> optionalFromAccount, Optional<Account> optionalToAccount) {
+        Transaction tempTransaction = new Transaction();
+        tempTransaction.setFromAccountId(transactionRequestDTO.getFromAccountId());
+        tempTransaction.setToAccountId(transactionRequestDTO.getToAccountId());
+        tempTransaction.setAmount(transactionRequestDTO.getAmount());
+        var tempTransaction2 = transactionRepository.save(tempTransaction);
+
+        optionalFromAccount.get().setBalance(optionalFromAccount.get().getBalance().subtract(tempTransaction.getAmount()));
+        optionalToAccount.get().setBalance(optionalToAccount.get().getBalance().add(tempTransaction.getAmount()));
+
+        return tempTransaction;
+    }
+
+    public Receipt createsReceiptWithoutResult(TransactionRequestDTO transactionRequestDTO, Optional<Account> optionalFromAccount, Optional<Account> optionalToAccount){
+
+        var receipt = new Receipt();
+        receipt.setDate(LocalDateTime.now());
+        receipt.setAmount(transactionRequestDTO.getAmount());
+        receipt.setFromAccountId(optionalFromAccount.get().getId());
+        receipt.setToAccountId(optionalToAccount.get().getId());
+
+        return receipt;
+
     }
 }

@@ -1,35 +1,30 @@
-package com.ironhack.midterm.banksystem.dao.operations;
+package com.ironhack.midterm.banksystem.dto.account;
 
-
+import com.ironhack.midterm.banksystem.dao.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
-public class Transaction {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private Long id;
 
     @NotNull
-    private Long fromAccountId;
-    @NotNull
-    private Long toAccountId;
-    @NotNull
-    private BigDecimal amount;
+    private BigDecimal balance;
 
-
+    @NotNull
+    private User user;
 }

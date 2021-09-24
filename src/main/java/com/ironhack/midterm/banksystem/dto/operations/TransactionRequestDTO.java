@@ -1,20 +1,24 @@
-package com.ironhack.midterm.banksystem.dao.operations;
+package com.ironhack.midterm.banksystem.dto.operations;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class TransactionRequest {
+public class TransactionRequestDTO {
 
+    @NotNull
     private Long fromAccountId;
+    @NotNull
     private Long toAccountId;
+    @NotNull
     private BigDecimal amount;
 
 }

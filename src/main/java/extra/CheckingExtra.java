@@ -4,7 +4,7 @@
 //import com.ironhack.midterm.banksystem.constants.MonthlyMaintenanceFee;
 //import com.ironhack.midterm.banksystem.constants.PenaltyFee;
 //import com.ironhack.midterm.banksystem.dao.user.AccountHolder;
-//import com.ironhack.midterm.banksystem.enums.Status;
+//import extra.Status;
 //import com.ironhack.midterm.banksystem.utils.Money;
 //import lombok.NoArgsConstructor;
 //
