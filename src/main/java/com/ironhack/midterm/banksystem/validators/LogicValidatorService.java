@@ -86,6 +86,13 @@ public class LogicValidatorService {
        return optionalUser.isPresent() ? true : false;
     }
 
+    public boolean userExists(Long id){
+
+        Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserById(id));
+
+        return optionalUser.isPresent() ? true : false;
+    }
+
     public User createsUser(UserCreationRequestDTO userCreationRequestDTO) {
 
         User user;

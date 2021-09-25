@@ -4,14 +4,11 @@ import com.ironhack.midterm.banksystem.controller.interfaces.IAdminController;
 import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.user.User;
 import com.ironhack.midterm.banksystem.dto.account.AccountDTO;
-import com.ironhack.midterm.banksystem.dto.account.BalanceDTO;
 import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
 import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
-import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExists;
-import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccounts;
-import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
-import com.ironhack.midterm.banksystem.repository.user.UserRepository;
+import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
+import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
 import com.ironhack.midterm.banksystem.service.impl.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +20,6 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping("/admin")
 public class AdminController implements IAdminController {
-
-    //Autowired account and user should be in service, call those methods here
 
     @Autowired
     private AdminService adminService;
@@ -60,13 +55,13 @@ public class AdminController implements IAdminController {
     //of receipt that has all the data
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account store(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccounts {
+    public Account store(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccountsException {
         return adminService.storeAccount(accountCreationRequestDTO);
     }
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public User store(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExists {
+    public User store(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExistsException {
         return adminService.storeUser(userCreationRequestDTO);
     }
 

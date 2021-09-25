@@ -9,8 +9,8 @@ import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
 import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
-import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExists;
-import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccounts;
+import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
+import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.user.UserRepository;
 import com.ironhack.midterm.banksystem.service.interfaces.user.IAdminService;
@@ -64,11 +64,11 @@ public class AdminService implements IAdminService {
 
     }
 
-    public Account storeAccount(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccounts {
+    public Account storeAccount(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccountsException {
 
         //Checks if User already has an Account
         if (logicValidatorService.accountHolderHasAnAccount(accountCreationRequestDTO.getAccountHolder())){
-            throw new UserHasMultipleAccounts("User can only have one account.");
+            throw new UserHasMultipleAccountsException("User can only have one account.");
         }
 
 
@@ -90,11 +90,11 @@ public class AdminService implements IAdminService {
         return account;
     }
 
-    public User storeUser(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExists {
+    public User storeUser(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExistsException {
 
         //Checks if User already exists
         if (logicValidatorService.userExists(userCreationRequestDTO)){
-            throw new UserAlreadyExists("There is already a User with that name");
+            throw new UserAlreadyExistsException("There is already a User with that name");
         }
 
         //Creates the Receipt

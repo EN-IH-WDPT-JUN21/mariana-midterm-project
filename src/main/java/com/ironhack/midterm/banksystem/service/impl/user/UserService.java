@@ -8,8 +8,11 @@ import com.ironhack.midterm.banksystem.dto.requests.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
+import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
+import com.ironhack.midterm.banksystem.exceptions.UserDoesNotExistException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
+import com.ironhack.midterm.banksystem.repository.user.UserRepository;
 import com.ironhack.midterm.banksystem.service.interfaces.user.IUserService;
 import com.ironhack.midterm.banksystem.validators.LogicValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     public List<Transaction> findAll() {
@@ -115,6 +121,17 @@ public class UserService implements IUserService {
         }else{
             throw new AccountDoesNotExistException("Account does not exist.");
         }
+
+    }
+
+    public List<Transaction> getTransactions(Long userId) throws UserDoesNotExistException {
+
+        //Checks if User exists
+        if (!logicValidatorService.userExists(userId)) {
+            throw new UserDoesNotExistException("There is no user with the id " + userId);
+        }
+
+        return userRepository.findTransactionsByUserId(userId);
 
     }
 }
