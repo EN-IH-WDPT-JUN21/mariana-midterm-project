@@ -1,14 +1,16 @@
-package com.ironhack.midterm.banksystem.service.impl.operations;
+package com.ironhack.midterm.banksystem.service.impl.user;
 
 import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.operations.Receipt;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
+import com.ironhack.midterm.banksystem.dto.account.BalanceDTO;
 import com.ironhack.midterm.banksystem.dto.operations.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
+import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
-import com.ironhack.midterm.banksystem.service.interfaces.operations.ITransactionService;
+import com.ironhack.midterm.banksystem.service.interfaces.user.IUserService;
 import com.ironhack.midterm.banksystem.validators.LogicValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +22,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TransactionService implements ITransactionService {
+public class UserService implements IUserService {
 
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
     private LogicValidatorService logicValidatorService;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
 
     public List<Transaction> findAll() {
@@ -64,8 +69,6 @@ public class TransactionService implements ITransactionService {
         }
 
         //create the transaction
-
-
         Transaction transaction = transfersMoney(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
         receipt.setTransactionId(transaction.getId());
@@ -97,6 +100,21 @@ public class TransactionService implements ITransactionService {
         receipt.setToAccountId(optionalToAccount.get().getId());
 
         return receipt;
+
+    }
+
+    public BalanceDTO accessBalance(Long accountId) throws AccountDoesNotExistException {
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+
+        if (optionalAccount.isPresent()) {
+            BalanceDTO balance = new BalanceDTO();
+            balance.setAmount(optionalAccount.get().getBalance());
+            //Will have to be updated when we use money object
+            balance.setCurrency("Dollar");
+            return balance;
+        }else{
+            throw new AccountDoesNotExistException("Account does not exist.");
+        }
 
     }
 }

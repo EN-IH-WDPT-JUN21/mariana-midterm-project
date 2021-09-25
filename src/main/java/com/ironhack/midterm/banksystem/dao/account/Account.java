@@ -1,5 +1,7 @@
 package com.ironhack.midterm.banksystem.dao.account;
 
+
+import com.ironhack.midterm.banksystem.dao.user.AccountHolder;
 import com.ironhack.midterm.banksystem.dao.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(name = "account_two")
+@Table(name = "account")
 public class Account {
 
     @Id
@@ -26,7 +28,7 @@ public class Account {
 
     @NotNull
     @OneToOne(mappedBy = "account")
-    private User user;
+    private AccountHolder accountHolder;
 
 
 }

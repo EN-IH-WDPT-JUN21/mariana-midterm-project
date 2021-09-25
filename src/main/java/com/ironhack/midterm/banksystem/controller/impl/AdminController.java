@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/admin")
@@ -50,11 +51,12 @@ public class AdminController implements IAdminController {
     }
 
     //BalanceDTO - can return an object inside BigDecimal + currency
-    @GetMapping("{id}/balance")
-    @ResponseStatus(HttpStatus.OK)
-    public BalanceDTO accessBalance(@PathVariable(name="id") Long id) throws AccountDoesNotExistException {
-        return adminService.accessBalance(id);
+    @PatchMapping("{id}/balance")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void modifyBalance(@PathVariable(name="id") Long id, @RequestBody @Valid BigDecimal amountDifference) throws AccountDoesNotExistException {
+        adminService.modifyBalance(id, amountDifference);
     }
+
 
     //with various users/accounts, we create the same way we created transaction (usercreationrequest), userdto instead
     //of receipt that has all the data

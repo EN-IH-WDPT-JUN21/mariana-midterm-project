@@ -8,7 +8,7 @@ import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
 
 import java.util.List;
 
-public interface ITransactionController {
+public interface IUserController {
 
     List<Transaction> getTransactions();
     Receipt performsTransaction(TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException;
