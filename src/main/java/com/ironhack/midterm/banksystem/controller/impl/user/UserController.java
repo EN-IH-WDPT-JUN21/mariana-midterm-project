@@ -1,10 +1,10 @@
-package com.ironhack.midterm.banksystem.controller.impl;
+package com.ironhack.midterm.banksystem.controller.impl.user;
 
 import com.ironhack.midterm.banksystem.controller.interfaces.IUserController;
-import com.ironhack.midterm.banksystem.dao.operations.Receipt;
+import com.ironhack.midterm.banksystem.dto.receipts.TransactionReceiptDTO;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dto.account.BalanceDTO;
-import com.ironhack.midterm.banksystem.dto.operations.TransactionRequestDTO;
+import com.ironhack.midterm.banksystem.dto.requests.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
 import com.ironhack.midterm.banksystem.service.impl.user.UserService;
@@ -34,9 +34,10 @@ public class UserController implements IUserController {
     public BalanceDTO accessBalance(@PathVariable(name="id") Long id) throws AccountDoesNotExistException {
         return userService.accessBalance(id);
     }
+
     //Performs Transaction
     @PostMapping("/transaction")
-    public Receipt performsTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
+    public TransactionReceiptDTO performsTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
         return userService.performsTransaction(transactionRequestDTO);
     }
 }

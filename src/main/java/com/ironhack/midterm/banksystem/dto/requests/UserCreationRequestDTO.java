@@ -1,30 +1,29 @@
-package com.ironhack.midterm.banksystem.dao.user;
+package com.ironhack.midterm.banksystem.dto.requests;
 
-import com.ironhack.midterm.banksystem.dao.account.Account;
+import com.ironhack.midterm.banksystem.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
-
-@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class User {
+public class UserCreationRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @NotNull
+    private UserType userType;
 
     @NotEmpty
     @NotBlank
     private String name;
 
-
+    private LocalDate dateOfBirth;
 }

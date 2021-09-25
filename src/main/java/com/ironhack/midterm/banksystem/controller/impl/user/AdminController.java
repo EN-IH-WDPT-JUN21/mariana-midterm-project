@@ -1,11 +1,15 @@
-package com.ironhack.midterm.banksystem.controller.impl;
+package com.ironhack.midterm.banksystem.controller.impl.user;
 
 import com.ironhack.midterm.banksystem.controller.interfaces.IAdminController;
 import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.user.User;
 import com.ironhack.midterm.banksystem.dto.account.AccountDTO;
 import com.ironhack.midterm.banksystem.dto.account.BalanceDTO;
+import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
+import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
+import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExists;
+import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccounts;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.user.UserRepository;
 import com.ironhack.midterm.banksystem.service.impl.user.AdminService;
@@ -24,12 +28,6 @@ public class AdminController implements IAdminController {
 
     @Autowired
     private AdminService adminService;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
 
     //user endpoints
@@ -62,14 +60,14 @@ public class AdminController implements IAdminController {
     //of receipt that has all the data
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account store(@RequestBody Account account){
-        return accountRepository.save(account);
+    public Account store(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccounts {
+        return adminService.storeAccount(accountCreationRequestDTO);
     }
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public User store(@RequestBody @Valid User user){
-        return userRepository.save(user);
+    public User store(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExists {
+        return adminService.storeUser(userCreationRequestDTO);
     }
 
 

@@ -1,6 +1,5 @@
-package com.ironhack.midterm.banksystem.dao.operations;
+package com.ironhack.midterm.banksystem.dto.requests;
 
-import com.ironhack.midterm.banksystem.enums.Result;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,13 +7,12 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Receipt {
+@Setter
+public class TransactionRequestDTO {
 
     @NotNull
     private Long fromAccountId;
@@ -22,11 +20,5 @@ public class Receipt {
     private Long toAccountId;
     @NotNull
     private BigDecimal amount;
-    @NotNull
-    private LocalDateTime date;
-    @NotNull
-    private Long transactionId;
-    @NotNull
-    private Result result;
 
 }

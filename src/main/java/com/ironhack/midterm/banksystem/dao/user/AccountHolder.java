@@ -10,9 +10,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import java.util.Optional;
 
 @Getter
 @AllArgsConstructor
@@ -23,7 +22,7 @@ import java.util.Optional;
 public class AccountHolder extends User {
 
     @Column(name="date_of_birth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
 //    @OneToOne
 //    @JoinColumn(name = "account_id", referencedColumnName = "id")
@@ -38,4 +37,8 @@ public class AccountHolder extends User {
     @OneToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

@@ -1,10 +1,10 @@
 package com.ironhack.midterm.banksystem.service.impl.user;
 
 import com.ironhack.midterm.banksystem.dao.account.Account;
-import com.ironhack.midterm.banksystem.dao.operations.Receipt;
+import com.ironhack.midterm.banksystem.dto.receipts.TransactionReceiptDTO;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dto.account.BalanceDTO;
-import com.ironhack.midterm.banksystem.dto.operations.TransactionRequestDTO;
+import com.ironhack.midterm.banksystem.dto.requests.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
@@ -38,7 +38,7 @@ public class UserService implements IUserService {
         return transactionRepository.findAll();
     }
 
-    public Receipt performsTransaction( @Valid TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
+    public TransactionReceiptDTO performsTransaction(@Valid TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
 
         //first a validation at dto level when you receive the object(add annotations)
         //it should be in a validator class - component, autowired (logic, finance)
@@ -60,21 +60,21 @@ public class UserService implements IUserService {
 
 
         //create the receipt
-        Receipt receipt = createsReceiptWithoutResult(transactionRequestDTO, optionalFromAccount, optionalToAccount);
+        TransactionReceiptDTO transactionReceiptDTO = createsReceiptWithoutResult(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
         //validate the request
         if (optionalFromAccount.get().getBalance().compareTo(transactionRequestDTO.getAmount()) < 0){
-            receipt.setResult(Result.CANCELLED);
-            return receipt;
+            transactionReceiptDTO.setResult(Result.CANCELLED);
+            return transactionReceiptDTO;
         }
 
         //create the transaction
         Transaction transaction = transfersMoney(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
-        receipt.setTransactionId(transaction.getId());
-        receipt.setResult(Result.OK);
+        transactionReceiptDTO.setTransactionId(transaction.getId());
+        transactionReceiptDTO.setResult(Result.OK);
 
-        return receipt;
+        return transactionReceiptDTO;
     }
 
     @Transactional
@@ -91,9 +91,9 @@ public class UserService implements IUserService {
         return tempTransaction;
     }
 
-    public Receipt createsReceiptWithoutResult(TransactionRequestDTO transactionRequestDTO, Optional<Account> optionalFromAccount, Optional<Account> optionalToAccount){
+    public TransactionReceiptDTO createsReceiptWithoutResult(TransactionRequestDTO transactionRequestDTO, Optional<Account> optionalFromAccount, Optional<Account> optionalToAccount){
 
-        var receipt = new Receipt();
+        var receipt = new TransactionReceiptDTO();
         receipt.setDate(LocalDateTime.now());
         receipt.setAmount(transactionRequestDTO.getAmount());
         receipt.setFromAccountId(optionalFromAccount.get().getId());
