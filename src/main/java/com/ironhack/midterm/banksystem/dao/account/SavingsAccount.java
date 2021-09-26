@@ -30,9 +30,7 @@ public class SavingsAccount extends Account{
 //    @Column(name= "penalty_fee")
 //    private final PenaltyFee penaltyFee  = new PenaltyFee(new Money(new BigDecimal("40")));
 
-    @CreatedDate
-    @Column(name= "creation_date")
-    private Date creationDate;
+
 
 //    @Column(name= "interest_rate")
 //    private InterestRate interestRate = new InterestRate(new BigDecimal("0.0025"));

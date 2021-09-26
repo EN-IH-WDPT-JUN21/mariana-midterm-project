@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Setter
-@Table(name="account_holder")
+@DiscriminatorValue("2")
 public class AccountHolder extends User {
 
     @Column(name="date_of_birth")
@@ -38,7 +38,5 @@ public class AccountHolder extends User {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+
 }

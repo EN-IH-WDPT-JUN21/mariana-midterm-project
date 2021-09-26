@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -33,6 +35,10 @@ public abstract class Account {
     @NotNull
     @OneToOne(mappedBy = "account")
     private AccountHolder accountHolder;
+
+    @CreatedDate
+    @Column(name= "creation_date")
+    private Date creationDate;
 
 
 }

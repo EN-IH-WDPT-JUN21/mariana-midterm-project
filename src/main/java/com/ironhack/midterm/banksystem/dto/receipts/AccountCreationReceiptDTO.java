@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -32,6 +34,10 @@ public class AccountCreationReceiptDTO {
 
     @NotNull
     private Long accountId;
+
+    @NotNull
+    @CreatedDate
+    private LocalDateTime date;
 
 
 }

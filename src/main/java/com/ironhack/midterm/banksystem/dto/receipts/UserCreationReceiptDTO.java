@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -32,4 +34,8 @@ public class UserCreationReceiptDTO {
 
     @NotNull
     private Long userId;
+
+    @NotNull
+    @CreatedDate
+    private LocalDateTime date;
 }

@@ -20,14 +20,12 @@ import java.util.Date;
 public class StudentCheckingAccount extends Account {
 
 
-    private int secretKey;
+
 
 //    @Column(name= "penalty_fee")
 //    private final PenaltyFee penaltyFee  = new PenaltyFee(new Money(new BigDecimal("40")));
 
-    @CreatedDate
-    @Column(name= "creation_date")
-    private Date creationDate;
+
 
    /* @Column(name= "status")
     @Enumerated(EnumType.STRING)*/

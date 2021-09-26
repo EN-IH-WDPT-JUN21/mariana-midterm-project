@@ -13,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User save(User user);
     User findUserByName(String name);
     User findUserById(Long id);
-    List<Transaction> findTransactionsByUserId(Long id);
+    List<Transaction> findTransactionsById(Long id);
 }

@@ -131,7 +131,7 @@ public class UserService implements IUserService {
             throw new UserDoesNotExistException("There is no user with the id " + userId);
         }
 
-        return userRepository.findTransactionsByUserId(userId);
+        return userRepository.findTransactionsById(userId);
 
     }
 }

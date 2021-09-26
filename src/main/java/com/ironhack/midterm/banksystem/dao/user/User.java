@@ -11,7 +11,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type",
+        discriminatorType = DiscriminatorType.INTEGER)
+@Table(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
