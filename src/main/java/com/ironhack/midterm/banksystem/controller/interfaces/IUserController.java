@@ -8,7 +8,6 @@ import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
 import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserDoesNotExistException;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 

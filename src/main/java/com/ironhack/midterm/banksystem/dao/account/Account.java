@@ -1,6 +1,5 @@
 package com.ironhack.midterm.banksystem.dao.account;
 
-
 import com.ironhack.midterm.banksystem.dao.user.AccountHolder;
 import com.ironhack.midterm.banksystem.enums.Status;
 import lombok.AllArgsConstructor;

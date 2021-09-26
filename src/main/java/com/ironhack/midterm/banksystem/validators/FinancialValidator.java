@@ -1,9 +1,7 @@
 package com.ironhack.midterm.banksystem.validators;
 
 import com.ironhack.midterm.banksystem.dao.account.Account;
-import com.ironhack.midterm.banksystem.dto.receipts.TransactionReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.requests.TransactionRequestDTO;
-import com.ironhack.midterm.banksystem.enums.Result;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

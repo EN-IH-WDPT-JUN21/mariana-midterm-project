@@ -14,5 +14,5 @@ import javax.persistence.Entity;
 @DiscriminatorValue("1")
 public class CheckingAccount extends Account{
 
-
+    public CheckingAccount() { super(); }
 }
