@@ -1,12 +1,14 @@
 package com.ironhack.midterm.banksystem.controller.impl.user;
 
 import com.ironhack.midterm.banksystem.controller.interfaces.IAdminController;
+import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dto.account.AccountDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.AccountCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.UserCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
 import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
+import com.ironhack.midterm.banksystem.enums.Status;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
@@ -59,6 +61,13 @@ public class AdminController implements IAdminController {
     @GetMapping("/transactions")
     public List<Transaction> getAllTransactions() {
         return adminService.findAll();
+    }
+
+    //Allows the admin to update an account's status
+    @PatchMapping("{id}/status")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Account changeStatus(@PathVariable(name="id") Long id, Status status) throws AccountDoesNotExistException {
+       return adminService.changeStatus(id, status);
     }
 
 }

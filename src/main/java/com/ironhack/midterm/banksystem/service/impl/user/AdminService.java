@@ -9,6 +9,7 @@ import com.ironhack.midterm.banksystem.dto.receipts.UserCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
 import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
+import com.ironhack.midterm.banksystem.enums.Status;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
@@ -132,4 +133,23 @@ public class AdminService implements IAdminService {
 
     }
 
+    //Receives account id and status
+    //Changes the status on the account
+    //Returns respective boolean
+    public Account changeStatus(Long id, Status status) throws AccountDoesNotExistException {
+
+        //Stores optional account
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+
+        //Checks if account exists
+        if (optionalAccount.isPresent()) {
+            optionalAccount.get().setStatus(status);
+        }else{
+            throw new AccountDoesNotExistException("Account does not exist.");
+        }
+
+        //Returns account
+        return accountRepository.save(optionalAccount.get());
+
+    }
 }

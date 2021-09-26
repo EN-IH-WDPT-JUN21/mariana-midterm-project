@@ -2,6 +2,7 @@ package com.ironhack.midterm.banksystem.dao.account;
 
 
 import com.ironhack.midterm.banksystem.dao.user.AccountHolder;
+import com.ironhack.midterm.banksystem.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,10 @@ public abstract class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "balance")
     private BigDecimal balance = new BigDecimal("0");
 
     @NotNull
@@ -36,5 +39,9 @@ public abstract class Account {
     @CreatedDate
     @Column(name= "creation_date")
     private Date creationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 
 }

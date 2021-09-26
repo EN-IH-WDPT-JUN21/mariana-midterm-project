@@ -1,11 +1,13 @@
 package com.ironhack.midterm.banksystem.controller.interfaces;
 
+import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dto.account.AccountDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.AccountCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.UserCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
 import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
+import com.ironhack.midterm.banksystem.enums.Status;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
@@ -29,4 +31,7 @@ public interface IAdminController {
 
     //Allows the Admin to access all the past transactions
     List<Transaction> getAllTransactions();
+
+    //Allows the admin to update an account's balance
+    Account changeStatus(Long id, Status status) throws AccountDoesNotExistException;
 }

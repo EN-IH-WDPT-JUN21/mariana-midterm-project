@@ -1,11 +1,13 @@
 package com.ironhack.midterm.banksystem.service.interfaces.user;
 
+import com.ironhack.midterm.banksystem.dao.account.Account;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dto.account.AccountDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.AccountCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.UserCreationReceiptDTO;
 import com.ironhack.midterm.banksystem.dto.requests.AccountCreationRequestDTO;
 import com.ironhack.midterm.banksystem.dto.requests.UserCreationRequestDTO;
+import com.ironhack.midterm.banksystem.enums.Status;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
@@ -35,4 +37,9 @@ public interface IAdminService {
     //Creates and saves the user
     //Returns the user creation receipt
     UserCreationReceiptDTO storeUser(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExistsException;
+
+    //Receives account id and status
+    //Changes the status on the account
+    //Returns respective boolean
+    Account changeStatus(Long id, Status status) throws AccountDoesNotExistException;
 }
