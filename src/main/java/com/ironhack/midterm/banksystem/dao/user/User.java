@@ -1,6 +1,5 @@
 package com.ironhack.midterm.banksystem.dao.user;
 
-import com.ironhack.midterm.banksystem.dao.account.Account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type",
-        discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
 @Table(name = "user")
 @Getter
 @Setter

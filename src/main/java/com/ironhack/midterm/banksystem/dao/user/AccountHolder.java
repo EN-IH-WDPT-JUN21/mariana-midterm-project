@@ -24,16 +24,6 @@ public class AccountHolder extends User {
     @Column(name="date_of_birth")
     private LocalDate dateOfBirth;
 
-//    @OneToOne
-//    @JoinColumn(name = "account_id", referencedColumnName = "id")
-//    private Account account;
-
-    //@OneToMany(mappedBy = "accountList", fetch = FetchType.LAZY)
-//    @OneToOne
-//    @JoinColumn(name = "account_id")
-//    Account account;
-//    private List<Account> accountList = new ArrayList<>();
-
     @OneToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;

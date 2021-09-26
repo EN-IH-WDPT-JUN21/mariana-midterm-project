@@ -36,6 +36,6 @@ public class UserCreationReceiptDTO {
     private Long userId;
 
     @NotNull
-    @CreatedDate
     private LocalDateTime date;
+
 }

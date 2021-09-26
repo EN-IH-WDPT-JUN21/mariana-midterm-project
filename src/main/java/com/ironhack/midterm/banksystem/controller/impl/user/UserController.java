@@ -24,26 +24,21 @@ public class UserController implements IUserController {
     private UserService userService;
 
 
-    //Update for all the transactions from a specific user
-    @GetMapping("/transactions")
-    public List<Transaction> getTransactions() {
-        return userService.findAll();
-    }
-
-    //Checks balance
+    //Allows the user to check the balance from the account id
     @GetMapping("/{id}/balance")
     @ResponseStatus(HttpStatus.OK)
     public BalanceDTO accessBalance(@PathVariable(name="id") Long id) throws AccountDoesNotExistException {
         return userService.accessBalance(id);
     }
 
+    //Allows the user to check his/hers past transactions
     @GetMapping("/{id}/transactions")
     @ResponseStatus(HttpStatus.OK)
     public List<Transaction> getTransactions(@PathVariable(name="id") Long id) throws UserDoesNotExistException, UserAlreadyExistsException {
         return userService.getTransactions(id);
     }
 
-    //Performs Transaction
+    //Allows the user to perform a transaction
     @PostMapping("/transaction")
     public TransactionReceiptDTO performsTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
         return userService.performsTransaction(transactionRequestDTO);

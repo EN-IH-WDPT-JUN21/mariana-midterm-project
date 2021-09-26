@@ -19,15 +19,19 @@ public class TransactionReceiptDTO {
 
     @NotNull
     private Long fromAccountId;
+
     @NotNull
     private Long toAccountId;
+
     @NotNull
     private BigDecimal amount;
+
     @NotNull
-    @CreatedDate
     private LocalDateTime date;
+
     @NotNull
     private Long transactionId;
+
     @NotNull
     private Result result;
 

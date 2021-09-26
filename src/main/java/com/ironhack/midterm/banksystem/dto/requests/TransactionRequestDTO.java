@@ -16,8 +16,10 @@ public class TransactionRequestDTO {
 
     @NotNull
     private Long fromAccountId;
+
     @NotNull
     private Long toAccountId;
+
     @NotNull
     private BigDecimal amount;
 

@@ -1,28 +1,14 @@
 package com.ironhack.midterm.banksystem.dao.account;
 
-import ch.qos.logback.core.status.Status;
-
-import com.ironhack.midterm.banksystem.dao.user.AccountHolder;
-
-import extra.constants.PenaltyFee;
-import extra.utils.Money;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Date;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @DiscriminatorValue("3")
 public class SavingsAccount extends Account{
-
-
-    private int secretKey;
 
 //    @Column(name= "minimum_balance")
 //    private MinimumBalance minimumBalance = new MinimumBalance(new Money(new BigDecimal("1000")));

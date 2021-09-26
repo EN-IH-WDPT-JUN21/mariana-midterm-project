@@ -1,16 +1,10 @@
 package com.ironhack.midterm.banksystem.dao.account;
 
-import ch.qos.logback.core.status.Status;
-import com.ironhack.midterm.banksystem.dao.user.AccountHolder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Date;
-
 
 @Getter
 @NoArgsConstructor

@@ -13,8 +13,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BalanceDTO {
+
     @NotNull
     private BigDecimal amount;
+
     @NotNull
     private String currency;
+
 }

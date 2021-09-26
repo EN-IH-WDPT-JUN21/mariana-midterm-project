@@ -8,7 +8,6 @@ import com.ironhack.midterm.banksystem.dto.requests.TransactionRequestDTO;
 import com.ironhack.midterm.banksystem.enums.Result;
 import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
-import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserDoesNotExistException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
@@ -28,7 +27,7 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    TransactionRepository transactionRepository;
 
     @Autowired
     private LogicValidatorService logicValidatorService;
@@ -36,22 +35,16 @@ public class UserService implements IUserService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private UserRepository userRepository;
 
-
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
-    }
-
+    //Receives a transaction request
+    //Creates and saves the transaction
+    //Returns the transaction receipt
     public TransactionReceiptDTO performsTransaction(@Valid TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
 
-        //first a validation at dto level when you receive the object(add annotations)
-        //it should be in a validator class - component, autowired (logic, finance)
-
-
+        //Will store From and To accounts
         Optional<Account>[] optionalAccounts;
 
+        //Validates if the accounts from and to exist and are not the same
         try {
            optionalAccounts = logicValidatorService.validatesTransactionAccounts(transactionRequestDTO);
         }catch (EqualAccountsException e){
@@ -60,62 +53,88 @@ public class UserService implements IUserService {
             throw new AccountDoesNotExistException(e.getMessage());
         }
 
+        //Stores the values in the array into its own object
         Optional<Account> optionalFromAccount = optionalAccounts[0];
         Optional<Account> optionalToAccount = optionalAccounts[1];
 
-
-
-        //create the receipt
+        //Creates the receipt
         TransactionReceiptDTO transactionReceiptDTO = createsReceiptWithoutResult(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
-        //validate the request
+        //Validates if the From Account has enough funds to perform the Transaction
         if (optionalFromAccount.get().getBalance().compareTo(transactionRequestDTO.getAmount()) < 0){
             transactionReceiptDTO.setResult(Result.CANCELLED);
             return transactionReceiptDTO;
         }
 
-        //create the transaction
+        //Creates and saves the transaction
         Transaction transaction = transfersMoney(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
+        //Fills Transaction ID and Result in the Receipt
         transactionReceiptDTO.setTransactionId(transaction.getId());
         transactionReceiptDTO.setResult(Result.OK);
 
+        //Returns receipt
         return transactionReceiptDTO;
+
     }
 
+    //Receives a transaction request, a from and to account
+    //Performs the transaction
+    //Returns the transaction object
     @Transactional
     public Transaction transfersMoney(TransactionRequestDTO transactionRequestDTO, Optional<Account> optionalFromAccount, Optional<Account> optionalToAccount) {
+
+        //Creates a temporary Transaction
         Transaction tempTransaction = new Transaction();
+
+        //Fills transaction values
         tempTransaction.setFromAccountId(transactionRequestDTO.getFromAccountId());
         tempTransaction.setToAccountId(transactionRequestDTO.getToAccountId());
         tempTransaction.setAmount(transactionRequestDTO.getAmount());
+
+        //Saves the transaction
         var tempTransaction2 = transactionRepository.save(tempTransaction);
 
+        //Performs the transaction
         optionalFromAccount.get().setBalance(optionalFromAccount.get().getBalance().subtract(tempTransaction.getAmount()));
         optionalToAccount.get().setBalance(optionalToAccount.get().getBalance().add(tempTransaction.getAmount()));
 
+        //Returns the transaction
         return tempTransaction;
+
     }
 
+    //Receives the transaction request, a from and to account
+    //Creates the receipt without result
+    //Returns the receipt without result
     public TransactionReceiptDTO createsReceiptWithoutResult(TransactionRequestDTO transactionRequestDTO, Optional<Account> optionalFromAccount, Optional<Account> optionalToAccount){
 
+        //Creates the receipt
         var receipt = new TransactionReceiptDTO();
-        receipt.setDate(LocalDateTime.now());
+
+        //Fills the receipt attribute
         receipt.setAmount(transactionRequestDTO.getAmount());
+        receipt.setDate(LocalDateTime.now());
         receipt.setFromAccountId(optionalFromAccount.get().getId());
         receipt.setToAccountId(optionalToAccount.get().getId());
 
+        //Returns the receipt
         return receipt;
 
     }
 
+    //Receives account id
+    //Returns the account's balance
     public BalanceDTO accessBalance(Long accountId) throws AccountDoesNotExistException {
+
+        //Looks for the account in the database
         Optional<Account> optionalAccount = accountRepository.findById(accountId);
 
+        //if it exists, it returns the balance
+        //if it doesn't, it throws an exception
         if (optionalAccount.isPresent()) {
             BalanceDTO balance = new BalanceDTO();
             balance.setAmount(optionalAccount.get().getBalance());
-            //Will have to be updated when we use money object
             balance.setCurrency("Dollar");
             return balance;
         }else{
@@ -124,6 +143,8 @@ public class UserService implements IUserService {
 
     }
 
+    //Receives user id
+    //Returns all the transactions of the user
     public List<Transaction> getTransactions(Long userId) throws UserDoesNotExistException {
 
         //Checks if User exists
@@ -131,7 +152,9 @@ public class UserService implements IUserService {
             throw new UserDoesNotExistException("There is no user with the id " + userId);
         }
 
-        return userRepository.findTransactionsById(userId);
+        //returns transaction list
+        return transactionRepository.findTransactionsByFromAccountId(userId);
 
     }
+
 }

@@ -1,6 +1,7 @@
 package com.ironhack.midterm.banksystem.service.impl.user;
 
 import com.ironhack.midterm.banksystem.dao.account.Account;
+import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dao.user.User;
 import com.ironhack.midterm.banksystem.dto.account.AccountDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.AccountCreationReceiptDTO;
@@ -12,6 +13,7 @@ import com.ironhack.midterm.banksystem.exceptions.AccountDoesNotExistException;
 import com.ironhack.midterm.banksystem.exceptions.UserAlreadyExistsException;
 import com.ironhack.midterm.banksystem.exceptions.UserHasMultipleAccountsException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
+import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
 import com.ironhack.midterm.banksystem.repository.user.UserRepository;
 import com.ironhack.midterm.banksystem.service.interfaces.user.IAdminService;
 import com.ironhack.midterm.banksystem.validators.LogicValidatorService;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,8 +37,16 @@ public class AdminService implements IAdminService {
     @Autowired
     private LogicValidatorService logicValidatorService;
 
+    @Autowired
+    TransactionRepository transactionRepository;
 
 
+    //Returns a list of all the Transactions
+    public List<Transaction> findAll() {
+        return transactionRepository.findAll();
+    }
+
+    //Receives an account id | Returns an account
     public AccountDTO accessAccountDetails(Long accountId) throws AccountDoesNotExistException {
 
         Optional<Account> optionalAccount = accountRepository.findById(accountId);
@@ -51,8 +63,10 @@ public class AdminService implements IAdminService {
 
     }
 
-    //Falta verificar se o saldo da conta fica negativo e/ou se é possível ter saldo negativo
+    //Receives an account id and the amount to add to the account balance
+    //Updates the account balance
     public void modifyBalance(Long accountId, BigDecimal amountDifference) throws AccountDoesNotExistException {
+
         Optional<Account> optionalAccount = accountRepository.findById(accountId);
 
         if (optionalAccount.isPresent()) {
@@ -64,33 +78,37 @@ public class AdminService implements IAdminService {
 
     }
 
-    public Account storeAccount(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccountsException {
+    //Receives an account creation request
+    //Creates and saves the account
+    //Returns the account creation receipt
+    public AccountCreationReceiptDTO storeAccount(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccountsException {
 
-        //Checks if User already has an Account
+        //Checks if user already has an account
         if (logicValidatorService.accountHolderHasAnAccount(accountCreationRequestDTO.getAccountHolder())){
             throw new UserHasMultipleAccountsException("User can only have one account.");
         }
-
 
         //Creates the Receipt
         AccountCreationReceiptDTO accountCreationReceiptDTO = new AccountCreationReceiptDTO();
         accountCreationReceiptDTO.setAccountHolder(accountCreationReceiptDTO.getAccountHolder());
         accountCreationReceiptDTO.setBalance(accountCreationRequestDTO.getBalance());
+        accountCreationReceiptDTO.setDate(LocalDateTime.now());
 
-        //Creates Account
+        //Creates and saves Account
         Account account = logicValidatorService.createsAccount(accountCreationRequestDTO);
-
-        //Saves Account
-        accountRepository.save(account);
 
         //Fills Result & Account Id in the Receipt
         accountCreationReceiptDTO.setResult(Result.OK);
         accountCreationReceiptDTO.setAccountId(account.getId());
 
-        return account;
+        //Returns the account created
+        return accountCreationReceiptDTO;
     }
 
-    public User storeUser(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExistsException {
+    //Receives an user creation request
+    //Creates and saves the user
+    //Returns the user creation receipt
+    public UserCreationReceiptDTO storeUser(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExistsException {
 
         //Checks if User already exists
         if (logicValidatorService.userExists(userCreationRequestDTO)){
@@ -100,20 +118,18 @@ public class AdminService implements IAdminService {
         //Creates the Receipt
         UserCreationReceiptDTO userCreationReceiptDTO = new UserCreationReceiptDTO();
         userCreationReceiptDTO.setName(userCreationRequestDTO.getName());
+        userCreationReceiptDTO.setDate(LocalDateTime.now());
 
-        //Creates User
+        //Creates and saves User
         User user = logicValidatorService.createsUser(userCreationRequestDTO);
-
-        //Saves User
-        userRepository.save(user);
 
         //Fills Result & Account Id in the Receipt
         userCreationReceiptDTO.setResult(Result.OK);
         userCreationReceiptDTO.setUserId(user.getId());
 
-        return user;
+        //Returns user creation receipt
+        return userCreationReceiptDTO;
+
     }
-
-
 
 }

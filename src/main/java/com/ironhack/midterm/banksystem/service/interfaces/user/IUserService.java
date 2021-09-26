@@ -1,5 +1,6 @@
 package com.ironhack.midterm.banksystem.service.interfaces.user;
 
+import com.ironhack.midterm.banksystem.dto.account.BalanceDTO;
 import com.ironhack.midterm.banksystem.dto.receipts.TransactionReceiptDTO;
 import com.ironhack.midterm.banksystem.dao.operations.Transaction;
 import com.ironhack.midterm.banksystem.dto.requests.TransactionRequestDTO;
@@ -12,7 +13,17 @@ import java.util.List;
 
 public interface IUserService {
 
-    List<Transaction> findAll();
+    //Receives a transaction request
+    //Creates and saves the transaction
+    //Returns the transaction receipt
     TransactionReceiptDTO performsTransaction(TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException;
+
+    //Receives account id
+    //Returns the account's balance
+    BalanceDTO accessBalance(Long accountId) throws AccountDoesNotExistException;
+
+    //Receives user id
+    //Returns all the transactions of the user
     List<Transaction> getTransactions(Long userId) throws UserAlreadyExistsException, UserDoesNotExistException;
+
 }

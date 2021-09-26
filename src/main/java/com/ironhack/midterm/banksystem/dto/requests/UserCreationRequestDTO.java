@@ -26,4 +26,5 @@ public class UserCreationRequestDTO {
     private String name;
 
     private LocalDate dateOfBirth;
+
 }

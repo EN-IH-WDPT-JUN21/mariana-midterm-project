@@ -26,7 +26,6 @@ import java.util.Optional;
 @Component
 public class LogicValidatorService {
 
-
     @Autowired
     private AccountRepository accountRepository;
 
@@ -34,11 +33,21 @@ public class LogicValidatorService {
     UserRepository userRepository;
 
 
+    public boolean accountHolderHasAnAccount(AccountHolder accountHolder){
+      return accountHolder.getAccount() != null ? true : false;
+
+        }
+
+    //Receives a transaction request
+    //Validates if they exist and are not the same
+    //Returns an array of both accounts
     public Optional<Account>[] validatesTransactionAccounts(TransactionRequestDTO transactionRequestDTO) throws AccountDoesNotExistException, EqualAccountsException {
 
+        //Stores the accounts in their own objects, if they exist
         Optional<Account> optionalFromAccount = accountRepository.findById(transactionRequestDTO.getFromAccountId());
         Optional<Account> optionalToAccount = accountRepository.findById(transactionRequestDTO.getToAccountId());
 
+        //Checks if they are different and if they exist in the database
         if (optionalFromAccount.get().equals(optionalToAccount.get())){
             throw new EqualAccountsException("The account that initiated the transaction is the same that is receiving the transaction.");
         }else if (optionalFromAccount.isEmpty()) {
@@ -47,66 +56,92 @@ public class LogicValidatorService {
             throw new AccountDoesNotExistException("The account that is receiving the transaction does not exist.");
         }
 
+        //Returns an array of both acounts
         return new Optional[]{optionalFromAccount, optionalToAccount};
+
     }
 
-    public boolean accountHolderHasAnAccount(AccountHolder accountHolder){
-      return accountHolder.getAccount() != null ? true : false;
-
-        }
-
-
+    //Receives a birth date
+    //Returns the current age
     public int calculateAgeFromDoB(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
+    //Receives account creation request
+    //Creates and stores account
+    //Returns saved account
     public Account createsAccount(AccountCreationRequestDTO accountCreationRequestDTO) {
+
         Account account;
 
+        //Creates account
         if(accountCreationRequestDTO.getAccountType() == AccountType.SAVINGS){
-
             account = new SavingsAccount();
-
-        }else if (accountCreationRequestDTO.getAccountType() == AccountType.CHECKING
+        } else if (accountCreationRequestDTO.getAccountType() == AccountType.CHECKING
                 && calculateAgeFromDoB(accountCreationRequestDTO.getAccountHolder().getDateOfBirth()) < 24){
             account = new StudentCheckingAccount();
-        }else {
+        } else {
             account = new CheckingAccount();
         }
+
+        //Fills balance and account holder
         account.setBalance(accountCreationRequestDTO.getBalance());
         account.setAccountHolder(accountCreationRequestDTO.getAccountHolder());
+
+        //Saves Account
+        accountRepository.save(account);
+
+        //Returns account
         return account;
+
     }
 
-
+    //Receives user creation request
+    //Checks if there is another user with the same name
+    //Returns respective boolean
     public boolean userExists(UserCreationRequestDTO userCreationRequestDTO){
 
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserByName(userCreationRequestDTO.getName()));
 
-       return optionalUser.isPresent() ? true : false;
+        return optionalUser.isPresent() ? true : false;
+
     }
 
+    //Receives user id
+    //Checks if there is another user with the same id
+    //Returns respective boolean
     public boolean userExists(Long id){
 
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserById(id));
 
         return optionalUser.isPresent() ? true : false;
+
     }
 
+    //Reveives user creation request
+    //Creates and saves user
+    //Returns saves user
     public User createsUser(UserCreationRequestDTO userCreationRequestDTO) {
 
         User user;
 
+        //Creates user
         if(userCreationRequestDTO.getUserType() == UserType.ADMIN){
-
             user = new Admin();
-        }else {
+        } else {
            user = new AccountHolder();
            ((AccountHolder) user).setDateOfBirth(userCreationRequestDTO.getDateOfBirth());
         }
 
+        //Fills user name
         user.setName(userCreationRequestDTO.getName());
+
+        //Saves user
+        userRepository.save(user);
+
+        //Returns user
         return user;
+
     }
 
 }

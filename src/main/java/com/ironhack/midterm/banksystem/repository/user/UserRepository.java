@@ -10,8 +10,13 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    //Stores user
     User save(User user);
+
+    //Finds user by name
     User findUserByName(String name);
+
+    //Finds user by id
     User findUserById(Long id);
-    List<Transaction> findTransactionsById(Long id);
+
 }

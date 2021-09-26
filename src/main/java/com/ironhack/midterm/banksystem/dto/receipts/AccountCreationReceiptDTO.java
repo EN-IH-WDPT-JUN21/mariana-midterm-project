@@ -11,7 +11,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -36,8 +35,6 @@ public class AccountCreationReceiptDTO {
     private Long accountId;
 
     @NotNull
-    @CreatedDate
     private LocalDateTime date;
-
 
 }
