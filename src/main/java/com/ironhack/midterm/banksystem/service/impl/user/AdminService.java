@@ -17,7 +17,7 @@ import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
 import com.ironhack.midterm.banksystem.repository.user.UserRepository;
 import com.ironhack.midterm.banksystem.service.interfaces.user.IAdminService;
-import com.ironhack.midterm.banksystem.validators.LogicValidatorService;
+import com.ironhack.midterm.banksystem.validators.LogicValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class AdminService implements IAdminService {
     private UserRepository userRepository;
 
     @Autowired
-    private LogicValidatorService logicValidatorService;
+    private LogicValidator logicValidator;
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -85,7 +85,7 @@ public class AdminService implements IAdminService {
     public AccountCreationReceiptDTO storeAccount(AccountCreationRequestDTO accountCreationRequestDTO) throws UserHasMultipleAccountsException {
 
         //Checks if user already has an account
-        if (logicValidatorService.accountHolderHasAnAccount(accountCreationRequestDTO.getAccountHolder())){
+        if (logicValidator.accountHolderHasAnAccount(accountCreationRequestDTO.getAccountHolder())){
             throw new UserHasMultipleAccountsException("User can only have one account.");
         }
 
@@ -96,7 +96,7 @@ public class AdminService implements IAdminService {
         accountCreationReceiptDTO.setDate(LocalDateTime.now());
 
         //Creates and saves Account
-        Account account = logicValidatorService.createsAccount(accountCreationRequestDTO);
+        Account account = logicValidator.createsAccount(accountCreationRequestDTO);
 
         //Fills Result & Account Id in the Receipt
         accountCreationReceiptDTO.setResult(Result.OK);
@@ -112,7 +112,7 @@ public class AdminService implements IAdminService {
     public UserCreationReceiptDTO storeUser(UserCreationRequestDTO userCreationRequestDTO) throws UserAlreadyExistsException {
 
         //Checks if User already exists
-        if (logicValidatorService.userExists(userCreationRequestDTO)){
+        if (logicValidator.userExists(userCreationRequestDTO)){
             throw new UserAlreadyExistsException("There is already a User with that name");
         }
 
@@ -122,7 +122,7 @@ public class AdminService implements IAdminService {
         userCreationReceiptDTO.setDate(LocalDateTime.now());
 
         //Creates and saves User
-        User user = logicValidatorService.createsUser(userCreationRequestDTO);
+        User user = logicValidator.createsUser(userCreationRequestDTO);
 
         //Fills Result & Account Id in the Receipt
         userCreationReceiptDTO.setResult(Result.OK);

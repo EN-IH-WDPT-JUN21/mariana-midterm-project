@@ -11,9 +11,9 @@ import com.ironhack.midterm.banksystem.exceptions.EqualAccountsException;
 import com.ironhack.midterm.banksystem.exceptions.UserDoesNotExistException;
 import com.ironhack.midterm.banksystem.repository.account.AccountRepository;
 import com.ironhack.midterm.banksystem.repository.operations.TransactionRepository;
-import com.ironhack.midterm.banksystem.repository.user.UserRepository;
 import com.ironhack.midterm.banksystem.service.interfaces.user.IUserService;
-import com.ironhack.midterm.banksystem.validators.LogicValidatorService;
+import com.ironhack.midterm.banksystem.validators.FinancialValidator;
+import com.ironhack.midterm.banksystem.validators.LogicValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,10 @@ public class UserService implements IUserService {
     TransactionRepository transactionRepository;
 
     @Autowired
-    private LogicValidatorService logicValidatorService;
+    private LogicValidator logicValidator;
+
+    @Autowired
+    private FinancialValidator financialValidator;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -46,7 +49,7 @@ public class UserService implements IUserService {
 
         //Validates if the accounts from and to exist and are not the same
         try {
-           optionalAccounts = logicValidatorService.validatesTransactionAccounts(transactionRequestDTO);
+           optionalAccounts = logicValidator.validatesTransactionAccounts(transactionRequestDTO);
         }catch (EqualAccountsException e){
             throw new EqualAccountsException(e.getMessage());
         }catch (AccountDoesNotExistException e){
@@ -61,7 +64,7 @@ public class UserService implements IUserService {
         TransactionReceiptDTO transactionReceiptDTO = createsReceiptWithoutResult(transactionRequestDTO, optionalFromAccount, optionalToAccount);
 
         //Validates if the From Account has enough funds to perform the Transaction
-        if (optionalFromAccount.get().getBalance().compareTo(transactionRequestDTO.getAmount()) < 0){
+        if(!financialValidator.hasEnoughFunds(transactionRequestDTO, optionalFromAccount)) {
             transactionReceiptDTO.setResult(Result.CANCELLED);
             return transactionReceiptDTO;
         }
@@ -148,7 +151,7 @@ public class UserService implements IUserService {
     public List<Transaction> getTransactions(Long userId) throws UserDoesNotExistException {
 
         //Checks if User exists
-        if (!logicValidatorService.userExists(userId)) {
+        if (!logicValidator.userExists(userId)) {
             throw new UserDoesNotExistException("There is no user with the id " + userId);
         }
 

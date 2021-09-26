@@ -24,7 +24,7 @@ import java.time.Period;
 import java.util.Optional;
 
 @Component
-public class LogicValidatorService {
+public class LogicValidator {
 
     @Autowired
     private AccountRepository accountRepository;
